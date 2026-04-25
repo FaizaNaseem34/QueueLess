@@ -1,0 +1,7 @@
+{
+  "name": "queueless",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
