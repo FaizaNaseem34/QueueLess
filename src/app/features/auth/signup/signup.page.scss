@@ -1,0 +1,126 @@
+.login-content {
+    --background: linear-gradient(135deg, #062c21 0%, #0a4d3c 100%);
+
+    .login-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 100%;
+        padding: 24px;
+    }
+}
+
+/* Role Segment Styling */
+.role-segment {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 4px;
+    margin-bottom: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+
+    ion-segment-button {
+        --indicator-color: #4ade80; // The active pill color
+        --color: rgba(255, 255, 255, 0.6);
+        --color-checked: #062c21;
+        --border-radius: 12px;
+        margin: 0;
+        min-height: 40px;
+        font-weight: 600;
+        transition: 0.3s ease;
+
+        &::part(indicator-background) {
+            box-shadow: 0 4px 12px rgba(74, 222, 128, 0.3);
+        }
+    }
+}
+
+.logo-section {
+    text-align: center;
+    margin-bottom: 30px;
+
+    .icon-circle {
+        background: rgba(255, 255, 255, 0.1);
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 15px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+
+        ion-icon {
+            font-size: 32px;
+            color: #4ade80;
+        }
+    }
+
+    h1 {
+        color: #ffffff;
+        font-weight: 800;
+        font-size: 2rem;
+        margin: 0;
+
+        span {
+            color: #4ade80;
+        }
+    }
+
+    p {
+        color: rgba(255, 255, 255, 0.7);
+        margin-top: 5px;
+        font-size: 0.9rem;
+    }
+}
+
+.form-wrapper {
+    width: 100%;
+    max-width: 400px;
+
+    .custom-input {
+        --background: rgba(255, 255, 255, 0.05);
+        --color: white;
+        --placeholder-color: rgba(255, 255, 255, 0.4);
+        --highlight-color-focused: #4ade80;
+        border-radius: 12px;
+        margin-bottom: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+
+        ion-icon {
+            color: #4ade80;
+            margin-top: 10px;
+        }
+    }
+
+    .signup-btn {
+        --background: #ffffff;
+        --color: #062c21;
+        --border-radius: 14px;
+        margin-top: 25px;
+        height: 56px;
+        font-weight: 700;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .error-message {
+        color: #ff4a4a;
+        font-size: 0.8rem;
+        padding-left: 15px;
+        margin-top: -10px;
+        margin-bottom: 15px;
+    }
+}
+
+.link-text {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.7);
+    margin-top: 25px;
+    font-size: 0.9rem;
+
+    span {
+        color: #4ade80;
+        font-weight: 600;
+        text-decoration: underline;
+    }
+}

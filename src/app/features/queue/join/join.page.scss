@@ -1,0 +1,139 @@
+.login-content {
+    --background: linear-gradient(135deg, #062c21 0%, #0a4d3c 100%);
+
+    .login-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 100%;
+        padding: 24px;
+    }
+}
+
+.logo-section {
+    text-align: center;
+    margin-bottom: 40px;
+
+    .icon-circle {
+        background: rgba(255, 255, 255, 0.1);
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 15px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+
+        ion-icon {
+            font-size: 40px;
+            color: #4ade80;
+        }
+    }
+
+    h1 {
+        color: #ffffff;
+        font-weight: 800;
+        font-size: 2.2rem;
+        margin: 0;
+
+        span {
+            color: #4ade80;
+        }
+    }
+
+    p {
+        color: rgba(255, 255, 255, 0.7);
+        margin-top: 5px;
+        font-size: 0.95rem;
+    }
+}
+
+.form-wrapper {
+    width: 100%;
+    max-width: 400px;
+
+    .join-btn {
+        --background: #4ade80; // Vibrant green for action
+        --background-activated: #3bbd6d;
+        --color: #062c21;
+        --border-radius: 16px;
+        height: 64px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        box-shadow: 0 10px 25px rgba(74, 222, 128, 0.3);
+        margin-bottom: 30px;
+        --transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+}
+
+/* Token Glassmorphism Card */
+.token-card {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 30px 20px;
+    text-align: center;
+    animation: slideUp 0.5s ease-out;
+
+    .token-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #4ade80;
+        margin-bottom: 20px;
+
+        ion-icon {
+            font-size: 20px;
+            margin-right: 8px;
+        }
+
+        p {
+            margin: 0;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.8rem;
+        }
+    }
+
+    .token-body {
+        p {
+            color: rgba(255, 255, 255, 0.6);
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        h1 {
+            color: #ffffff;
+            font-size: 4.5rem;
+            font-weight: 900;
+            margin: 10px 0;
+            text-shadow: 0 0 20px rgba(74, 222, 128, 0.4);
+        }
+    }
+
+    .token-footer {
+        p {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.8rem;
+            margin-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 15px;
+        }
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

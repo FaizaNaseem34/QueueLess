@@ -1,0 +1,89 @@
+<ion-header [translucent]="true">
+</ion-header>
+
+<ion-content class="login-content" [fullscreen]="true">
+  <div class="login-container">
+
+    <div class="logo-section">
+      <div class="icon-circle">
+        <ion-icon name="person-add-outline"></ion-icon>
+      </div>
+      <h1>Create <span>Account</span></h1>
+      <p>Join QueueLess today</p>
+    </div>
+
+    <div class="form-wrapper">
+      <ion-segment [(ngModel)]="role" class="role-segment" style="margin-bottom: 20px;">
+        <ion-segment-button value="user">
+          <ion-label>User</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="admin">
+          <ion-label>Admin</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+
+      <form [formGroup]="signupForm" (ngSubmit)="signup()">
+        <ng-container *ngIf="role === 'admin'">
+          <ion-item lines="none" class="custom-input fade-in" [class.ion-invalid]="isSubmitted && f['organizationName'].errors">
+            <ion-icon name="business-outline" slot="start"></ion-icon>
+            <ion-input
+              label="Organization Name"
+              label-placement="floating"
+              type="text"
+              placeholder="e.g. City Hospital"
+              formControlName="organizationName">
+            </ion-input>
+          </ion-item>
+          <div class="error-message" *ngIf="isSubmitted && f['organizationName'].errors?.['required']">Organization name is required for admins</div>
+        </ng-container>
+
+        <ion-item lines="none" class="custom-input" [class.ion-invalid]="isSubmitted && f['fullName'].errors">
+          <ion-icon name="person-outline" slot="start"></ion-icon>
+          <ion-input
+            label="Full Name"
+            label-placement="floating"
+            type="text"
+            placeholder="John Doe"
+            formControlName="fullName">
+          </ion-input>
+        </ion-item>
+        <div class="error-message" *ngIf="isSubmitted && f['fullName'].errors?.['required']">Full name is required</div>
+
+        <ion-item lines="none" class="custom-input" [class.ion-invalid]="isSubmitted && f['email'].errors">
+          <ion-icon name="mail-outline" slot="start"></ion-icon>
+          <ion-input
+            label="Email"
+            label-placement="floating"
+            type="email"
+            placeholder="name@example.com"
+            formControlName="email">
+          </ion-input>
+        </ion-item>
+        <div class="error-message" *ngIf="isSubmitted && f['email'].errors?.['required']">Email is required</div>
+        <div class="error-message" *ngIf="isSubmitted && f['email'].errors?.['email']">Please enter a valid email</div>
+
+        <ion-item lines="none" class="custom-input" [class.ion-invalid]="isSubmitted && f['password'].errors">
+          <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+          <ion-input
+            label="Password"
+            label-placement="floating"
+            type="password"
+            placeholder="••••••••"
+            formControlName="password">
+          </ion-input>
+        </ion-item>
+        <div class="error-message" *ngIf="isSubmitted && f['password'].errors?.['required']">Password is required</div>
+        <div class="error-message" *ngIf="isSubmitted && f['password'].errors?.['minlength']">Password must be at least 6 characters</div>
+
+        <ion-button expand="block" class="signup-btn" type="submit">
+          Sign Up
+        </ion-button>
+      </form>
+
+      <p class="link-text" routerLink="/auth/login">
+        Already have an account? <span>Login</span>
+      </p>
+    </div>
+
+  </div>
+</ion-content>

@@ -1,0 +1,292 @@
+.user-header {
+  ion-toolbar {
+    --background: #062c21;
+    --color: white;
+    --border-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+.user-content {
+  --background: linear-gradient(135deg, #062c21 0%, #0a4d3c 100%);
+  color: white;
+
+  .dashboard-container {
+    padding: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .header-section {
+    text-align: center;
+    margin-bottom: 25px;
+
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin: 0;
+      span {
+        color: #4ade80;
+      }
+    }
+    p {
+      color: rgba(255, 255, 255, 0.7);
+      margin-top: 5px;
+      font-size: 0.95rem;
+    }
+  }
+
+  .custom-segment {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 4px;
+    margin-bottom: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+
+    ion-segment-button {
+      --indicator-color: #4ade80;
+      --color: rgba(255, 255, 255, 0.6);
+      --color-checked: #062c21;
+      --border-radius: 12px;
+      margin: 0;
+      min-height: 44px;
+      font-weight: 600;
+
+      &::part(indicator-background) {
+        box-shadow: 0 4px 12px rgba(74, 222, 128, 0.3);
+      }
+    }
+  }
+
+  .fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  .spinner-container {
+    display: flex;
+    justify-content: center;
+    padding: 40px;
+    ion-spinner {
+      color: #4ade80;
+    }
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 20px;
+    border: 1px dashed rgba(255, 255, 255, 0.2);
+
+    ion-icon {
+      font-size: 48px;
+      color: rgba(255, 255, 255, 0.3);
+      margin-bottom: 15px;
+    }
+
+    p {
+      color: rgba(255, 255, 255, 0.6);
+      margin: 0;
+    }
+  }
+
+  // Browse Queues Cards
+  .queue-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: transform 0.2s;
+
+    &:active {
+      transform: scale(0.98);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+
+      h2 {
+        margin: 0;
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: white;
+      }
+
+      .category-badge {
+        display: inline-block;
+        background: rgba(74, 222, 128, 0.2);
+        color: #4ade80;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-top: 5px;
+      }
+    }
+
+    .description {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.9rem;
+      margin-bottom: 15px;
+      line-height: 1.4;
+    }
+
+    .stats-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 20px;
+
+      .stat {
+        display: flex;
+        align-items: center;
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 0.9rem;
+
+        ion-icon {
+          color: #4ade80;
+          margin-right: 10px;
+          font-size: 1.2rem;
+        }
+      }
+    }
+
+    .join-btn {
+      --background: #4ade80;
+      --color: #062c21;
+      --border-radius: 12px;
+      margin: 0;
+      height: 48px;
+      font-weight: 700;
+    }
+  }
+
+  // My Tokens Cards
+  .token-card {
+    background: white;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+
+    .token-header {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 15px 20px;
+      border-bottom: 2px dashed rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      h2 {
+        margin: 0;
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #062c21;
+      }
+
+      .status-badge {
+        padding: 6px 12px;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        font-weight: 700;
+      }
+    }
+
+    .token-body {
+      background: #f8fafc;
+      padding: 20px;
+
+      .token-number-box {
+        text-align: center;
+        margin-bottom: 20px;
+
+        span {
+          color: #64748b;
+          font-size: 0.9rem;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+        }
+
+        h1 {
+          margin: 5px 0 0 0;
+          font-size: 3.5rem;
+          font-weight: 900;
+          color: #062c21;
+          letter-spacing: -2px;
+        }
+      }
+
+      .live-stats {
+        display: flex;
+        gap: 15px;
+
+        .stat-box {
+          flex: 1;
+          background: white;
+          padding: 12px;
+          border-radius: 12px;
+          border: 1px solid rgba(0, 0, 0, 0.05);
+          display: flex;
+          align-items: center;
+          gap: 10px;
+
+          ion-icon {
+            font-size: 24px;
+            color: #0a4d3c;
+          }
+
+          p {
+            margin: 0;
+            font-size: 0.75rem;
+            color: #64748b;
+            text-transform: uppercase;
+          }
+
+          strong {
+            display: block;
+            font-size: 1.1rem;
+            color: #0f172a;
+            margin-top: 2px;
+          }
+        }
+      }
+
+      .serving-alert {
+        background: #dcfce7;
+        border: 1px solid #86efac;
+        color: #166534;
+        padding: 15px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 600;
+
+        ion-icon {
+          font-size: 24px;
+        }
+
+        p {
+          margin: 0;
+          font-size: 0.95rem;
+        }
+      }
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

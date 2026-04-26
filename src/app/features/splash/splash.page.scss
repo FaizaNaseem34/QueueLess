@@ -1,0 +1,87 @@
+.splash-content {
+  --background: #064e3b; /* Dark Green Theme Color */
+}
+
+.splash-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  background: radial-gradient(circle at center, #0a8a65 0%, #064e3b 100%);
+}
+
+.logo-wrapper {
+  text-align: center;
+  color: #ffffff;
+
+  .icon-circle {
+    width: 120px;
+    height: 120px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 30px; /* Squircle style */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    
+    ion-icon {
+      font-size: 60px;
+      color: #ffffff;
+    }
+  }
+
+  h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    margin: 0 0 8px;
+    letter-spacing: -1px;
+    color: #ffffff;
+    
+    span {
+      color: rgba(255, 255, 255, 0.7);
+    }
+  }
+
+  p {
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 300;
+    margin: 0;
+  }
+}
+
+.loading-indicator {
+  position: absolute;
+  bottom: 80px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.6);
+  
+  ion-spinner {
+    color: #ffffff;
+    transform: scale(1.2);
+    margin-bottom: 12px;
+  }
+
+  p {
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+}
+
+/* Pulse Animation */
+.pulse-animation {
+  animation: pulse 2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0% { transform: scale(0.98); opacity: 0.9; }
+  50% { transform: scale(1.02); opacity: 1; }
+  100% { transform: scale(0.98); opacity: 0.9; }
+}

@@ -1,0 +1,56 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/user"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Join Queue</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="login-content" [fullscreen]="true">
+  <div class="login-container">
+
+    <div *ngIf="fetchingDetails" class="loading-state">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Loading queue details...</p>
+    </div>
+
+    <div *ngIf="!fetchingDetails && !queueDetails" class="error-state">
+      <ion-icon name="alert-circle-outline" color="danger" size="large"></ion-icon>
+      <h2>Queue Not Found</h2>
+      <p>The queue you are trying to join does not exist or has been removed.</p>
+      <ion-button routerLink="/user" fill="clear">Return to Dashboard</ion-button>
+    </div>
+
+    <div *ngIf="!fetchingDetails && queueDetails" class="form-wrapper glass-panel">
+      <div class="logo-section">
+        <div class="icon-circle">
+          <ion-icon name="business-outline"></ion-icon>
+        </div>
+        <p style="color: var(--ion-color-primary); font-weight: 600; font-size: 0.9rem; margin-bottom: 5px;">{{ queueDetails.organizationName || 'Independent' }}</p>
+        <h1 style="margin-top: 0;">{{ queueDetails.name }}</h1>
+        <p><ion-icon name="location-outline"></ion-icon> {{ queueDetails.location }}</p>
+        <p>{{ queueDetails.description }}</p>
+      </div>
+
+      <div class="queue-stats">
+        <ion-item lines="none" class="transparent-item">
+          <ion-icon name="people-outline" slot="start"></ion-icon>
+          <ion-label>Currently Waiting</ion-label>
+          <ion-note slot="end">{{ queueDetails.totalTokens - queueDetails.currentToken }}</ion-note>
+        </ion-item>
+        <ion-item lines="none" class="transparent-item">
+          <ion-icon name="time-outline" slot="start"></ion-icon>
+          <ion-label>Est. Wait Time</ion-label>
+          <ion-note slot="end">~{{ (queueDetails.totalTokens - queueDetails.currentToken) * queueDetails.avgServiceTime }} mins</ion-note>
+        </ion-item>
+      </div>
+
+      <ion-button expand="block" class="join-btn" (click)="joinQueue()" [disabled]="loading || !queueDetails.isActive">
+        <ion-spinner *ngIf="loading" name="crescent"></ion-spinner>
+        <span *ngIf="!loading">{{ queueDetails.isActive ? 'Join Queue' : 'Queue is Inactive' }}</span>
+      </ion-button>
+    </div>
+
+  </div>
+</ion-content>

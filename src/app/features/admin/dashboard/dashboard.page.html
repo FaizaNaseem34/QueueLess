@@ -1,0 +1,211 @@
+<ion-header class="admin-header">
+  <ion-toolbar>
+    <ion-title>
+      <ion-icon name="shield-checkmark"></ion-icon> Admin Dashboard
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="showCreateForm = !showCreateForm" class="create-btn">
+        <ion-icon name="add-circle-outline" slot="start"></ion-icon>
+        New Queue
+      </ion-button>
+      <ion-button (click)="logout()" fill="clear" color="danger">
+        <ion-icon name="log-out-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="admin-content">
+
+  <!-- Create Queue Form -->
+  <div class="create-form-overlay" *ngIf="showCreateForm" (click)="showCreateForm = false"></div>
+  <div class="create-form-panel" *ngIf="showCreateForm">
+    <div class="panel-header">
+      <h2><ion-icon name="layers-outline"></ion-icon> Create New Queue</h2>
+      <ion-button fill="clear" (click)="showCreateForm = false">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </div>
+    <form [formGroup]="createForm" (ngSubmit)="createQueue()">
+      <div class="form-group">
+        <label>Queue Name *</label>
+        <ion-item lines="none" class="input-item" [class.invalid]="createForm.get('name')?.invalid && createForm.get('name')?.touched">
+          <ion-icon name="list-outline" slot="start"></ion-icon>
+          <ion-input formControlName="name" placeholder="e.g. Hospital OPD" type="text"></ion-input>
+        </ion-item>
+      </div>
+      <div class="form-group">
+        <label>Description *</label>
+        <ion-item lines="none" class="input-item">
+          <ion-icon name="document-text-outline" slot="start"></ion-icon>
+          <ion-input formControlName="description" placeholder="Brief description"></ion-input>
+        </ion-item>
+      </div>
+      <div class="form-group">
+        <label>Location *</label>
+        <ion-item lines="none" class="input-item">
+          <ion-icon name="location-outline" slot="start"></ion-icon>
+          <ion-input formControlName="location" placeholder="e.g. Room 101, Floor 2"></ion-input>
+        </ion-item>
+      </div>
+      <div class="form-row">
+        <div class="form-group half">
+          <label>Category</label>
+          <ion-item lines="none" class="input-item">
+            <ion-select formControlName="category" interface="popover">
+              <ion-select-option *ngFor="let cat of categories" [value]="cat">{{ cat }}</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
+        <div class="form-group half">
+          <label>Avg. Service Time (min)</label>
+          <ion-item lines="none" class="input-item">
+            <ion-icon name="timer-outline" slot="start"></ion-icon>
+            <ion-input formControlName="avgServiceTime" type="number" min="1" max="120"></ion-input>
+          </ion-item>
+        </div>
+      </div>
+      <ion-button expand="block" class="submit-btn" (click)="createQueue()">
+        <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
+        Create Queue
+      </ion-button>
+    </form>
+  </div>
+
+  <!-- Main Grid -->
+  <div class="admin-grid">
+
+    <!-- Left: Queue List -->
+    <div class="queue-list-panel">
+      <div class="panel-title">
+        <ion-icon name="grid-outline"></ion-icon> My Queues
+        <span class="badge">{{ queues.length }}</span>
+      </div>
+
+      <div class="empty-state" *ngIf="queues.length === 0">
+        <ion-icon name="cube-outline"></ion-icon>
+        <p>No queues yet. Create your first queue!</p>
+      </div>
+
+      <div class="queue-card" *ngFor="let queue of queues"
+           [class.selected]="selectedQueue?.id === queue.id"
+           (click)="selectQueue(queue)">
+        <div class="queue-card-header">
+          <div class="queue-info">
+            <span class="queue-name">{{ queue.name }}</span>
+            <span class="queue-id" style="font-size: 0.8rem; color: #888;">ID: {{ queue.id }}</span>
+            <span class="queue-category">{{ queue.category }}</span>
+          </div>
+          <ion-toggle [checked]="queue.isActive" (click)="toggleQueue(queue, $event)" size="small"></ion-toggle>
+        </div>
+        <div class="queue-card-stats">
+          <div class="stat">
+            <ion-icon name="people-outline"></ion-icon>
+            <span>{{ queue.totalTokens }}</span> total
+          </div>
+          <div class="stat">
+            <ion-icon name="play-circle-outline"></ion-icon>
+            <span>{{ queue.currentToken }}</span> serving
+          </div>
+          <div class="stat">
+            <ion-icon name="location-outline"></ion-icon>
+            {{ queue.location }}
+          </div>
+        </div>
+        <!-- QR Code -->
+        <div class="qr-section" *ngIf="qrCodes[queue.id]">
+          <img [src]="qrCodes[queue.id]" alt="QR Code" />
+          <p class="qr-label">Scan to join</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Token Management -->
+    <div class="token-panel" *ngIf="selectedQueue; else noQueueSelected">
+      <div class="token-panel-header">
+        <div>
+          <h2>{{ selectedQueue.name }}</h2>
+          <p>{{ selectedQueue.location }} · {{ selectedQueue.category }}</p>
+        </div>
+        <div class="now-serving">
+          <span class="serving-label">Now Serving</span>
+          <span class="serving-number">#{{ selectedQueue.currentToken || '—' }}</span>
+        </div>
+      </div>
+
+      <!-- Stats Row -->
+      <div class="stats-row">
+        <div class="stat-card waiting">
+          <ion-icon name="hourglass-outline"></ion-icon>
+          <span class="stat-num">{{ waitingTokens.length }}</span>
+          <span class="stat-lbl">Waiting</span>
+        </div>
+        <div class="stat-card serving">
+          <ion-icon name="person-outline"></ion-icon>
+          <span class="stat-num">{{ servingTokens.length }}</span>
+          <span class="stat-lbl">Serving</span>
+        </div>
+        <div class="stat-card done">
+          <ion-icon name="checkmark-done-outline"></ion-icon>
+          <span class="stat-num">{{ doneTokens.length }}</span>
+          <span class="stat-lbl">Done</span>
+        </div>
+        <div class="stat-card cancelled" style="color: var(--ion-color-danger);">
+          <ion-icon name="close-circle-outline"></ion-icon>
+          <span class="stat-num">{{ cancelledTokens.length }}</span>
+          <span class="stat-lbl">Cancelled</span>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons-row" style="display: flex; gap: 10px; margin-bottom: 20px;">
+        <ion-button expand="block" class="call-next-btn" (click)="callNext()" style="flex: 2; margin: 0;">
+          <ion-icon name="arrow-forward-circle-outline" slot="start"></ion-icon>
+          Call Next Token
+        </ion-button>
+        <ion-button expand="block" color="secondary" (click)="addWalkIn()" style="flex: 1; margin: 0;">
+          <ion-icon name="person-add-outline" slot="start"></ion-icon>
+          Walk-In
+        </ion-button>
+      </div>
+
+      <!-- Announcement Panel -->
+      <div class="announcement-panel glass-panel" style="margin-bottom: 20px; padding: 15px;">
+        <h4 style="margin-top: 0; display: flex; align-items: center; gap: 8px;">
+          <ion-icon name="megaphone-outline" color="warning"></ion-icon> Broadcast Announcement
+        </h4>
+        <ion-item lines="none" class="transparent-item" style="--background: rgba(0,0,0,0.2);">
+          <ion-input [(ngModel)]="announcementMessage" placeholder="e.g. Doctor running 15 mins late..."></ion-input>
+        </ion-item>
+        <ion-button size="small" (click)="updateAnnouncement()" expand="block" fill="outline" color="light">
+          Update Announcement
+        </ion-button>
+      </div>
+
+      <!-- Token List -->
+      <div class="token-list">
+        <div class="token-item" *ngFor="let token of queueTokens" [class]="token.status">
+          <div class="token-number">#{{ token.tokenNumber }}</div>
+          <div class="token-info">
+            <span class="token-name">{{ token.userName }}</span>
+            <ion-badge [color]="token.status === 'serving' ? 'success' : token.status === 'waiting' ? 'warning' : 'medium'">
+              {{ token.status }}
+            </ion-badge>
+          </div>
+        </div>
+        <div class="empty-state" *ngIf="queueTokens.length === 0">
+          <ion-icon name="people-outline"></ion-icon>
+          <p>No tokens yet.</p>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #noQueueSelected>
+      <div class="token-panel placeholder-panel">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+        <h3>Select a queue to manage tokens</h3>
+      </div>
+    </ng-template>
+
+  </div>
+</ion-content>

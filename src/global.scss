@@ -35,3 +35,87 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
+
+/* ==========================================================================
+   Premium Dark Theme & Glassmorphism Utilities
+   ========================================================================== */
+
+:root {
+  /* Typography */
+  --ion-font-family: 'Inter', sans-serif;
+  --font-heading: 'Outfit', sans-serif;
+
+  /* Colors */
+  --ion-color-primary: #0a8a65;
+  --ion-color-primary-rgb: 10,138,101;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-shade: #097959;
+  --ion-color-primary-tint: #229674;
+
+  --ion-background-color: #0b0f19;
+  --ion-text-color: #f1f5f9;
+
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+body {
+  background: radial-gradient(circle at 10% 20%, rgb(9, 23, 33) 0%, rgb(11, 15, 25) 90%);
+  color: var(--ion-text-color);
+}
+
+/* Typography Classes */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  letter-spacing: -0.5px;
+}
+
+/* Glassmorphism Panel */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  box-shadow: var(--glass-shadow);
+  padding: 24px;
+}
+
+/* Buttons */
+ion-button {
+  --border-radius: 12px;
+  --box-shadow: 0 4px 14px 0 rgba(10, 138, 101, 0.39);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+ion-button[color="danger"] {
+  --box-shadow: 0 4px 14px 0 rgba(235, 68, 90, 0.39);
+}
+
+/* Inputs & Forms */
+ion-item.transparent-item {
+  --background: transparent;
+  --border-color: rgba(255, 255, 255, 0.1);
+  margin-bottom: 12px;
+  border-radius: 12px;
+  --padding-start: 16px;
+}
+
+ion-item.transparent-item ion-input,
+ion-item.transparent-item ion-textarea,
+ion-item.transparent-item ion-select {
+  font-family: var(--ion-font-family);
+}
+
+/* Animations */
+.fade-in {
+  animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

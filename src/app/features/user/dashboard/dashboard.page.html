@@ -1,0 +1,207 @@
+<ion-header class="user-header">
+  <ion-toolbar>
+    <ion-title>
+      Hello, {{ getUserName() }}
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="logout()" fill="clear" color="danger">
+        <ion-icon name="log-out-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="user-content">
+  <div class="dashboard-container">
+    <div class="header-section">
+      <h1>Queue<span>Less</span></h1>
+      <p>Skip the line. Save your time.</p>
+    </div>
+
+    <ion-segment [(ngModel)]="activeTab" class="custom-segment">
+      <ion-segment-button value="queues">
+        <ion-label>Browse Queues</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="myTokens">
+        <ion-label>My Tokens</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="history">
+        <ion-label>History</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+
+    <!-- BROWSE QUEUES TAB -->
+    <div *ngIf="activeTab === 'queues'" class="tab-content fade-in">
+      <div class="empty-state" *ngIf="!loadingQueues && queues.length === 0">
+        <ion-icon name="cube-outline"></ion-icon>
+        <p>No active queues available right now.</p>
+      </div>
+
+      <div class="spinner-container" *ngIf="loadingQueues">
+        <ion-spinner name="crescent"></ion-spinner>
+      </div>
+
+      <div class="queue-card" *ngFor="let queue of queues">
+        <div class="card-header">
+          <div class="info">
+            <div class="org-name" style="font-size: 0.85rem; color: var(--ion-color-primary); margin-bottom: 4px; font-weight: 500;">
+              <ion-icon name="business-outline"></ion-icon> {{ queue.organizationName || 'Independent' }}
+            </div>
+            <h2>{{ queue.name }}</h2>
+            <span class="category-badge">{{ queue.category }}</span>
+          </div>
+        </div>
+        
+        <p class="description">{{ queue.description }}</p>
+        
+        <div class="stats-grid">
+          <div class="stat">
+            <ion-icon name="location-outline"></ion-icon>
+            <span>{{ queue.location }}</span>
+          </div>
+          <div class="stat">
+            <ion-icon name="people-outline"></ion-icon>
+            <span>{{ queue.totalTokens - (queue.currentToken || 0) }} Waiting</span>
+          </div>
+          <div class="stat">
+            <ion-icon name="time-outline"></ion-icon>
+            <span>~{{ queue.avgServiceTime }} mins/person</span>
+          </div>
+        </div>
+
+        <ion-button expand="block" class="join-btn" (click)="joinQueue(queue)">
+          <ion-icon name="enter-outline" slot="start"></ion-icon>
+          Join Queue
+        </ion-button>
+      </div>
+    </div>
+
+    <!-- MY TOKENS TAB -->
+    <div *ngIf="activeTab === 'myTokens'" class="tab-content fade-in">
+      <div class="empty-state" *ngIf="myTokens.length === 0">
+        <ion-icon name="ticket-outline"></ion-icon>
+        <p>You haven't joined any queues yet.</p>
+      </div>
+
+      <div class="token-card" *ngFor="let token of myTokens">
+        <div class="token-header">
+          <div style="display: flex; flex-direction: column;">
+            <span style="font-size: 0.85rem; color: var(--ion-color-primary); font-weight: 500;">
+              <ion-icon name="business-outline"></ion-icon> {{ token.organizationName || 'Independent' }}
+            </span>
+            <h2 style="margin: 0; padding-top: 4px;">{{ token.queueName }}</h2>
+          </div>
+          <ion-badge [color]="getStatusColor(token.status)" class="status-badge">
+            {{ token.status | titlecase }}
+          </ion-badge>
+        </div>
+
+        <div class="token-body">
+          <div class="token-number-box">
+            <span>Your Token</span>
+            <h1>#{{ token.tokenNumber }}</h1>
+          </div>
+
+          <div *ngIf="getAnnouncement(token.queueId) as announcement" class="announcement-banner fade-in" style="background: rgba(255,196,9,0.15); color: #ffc409; padding: 10px; border-radius: 8px; margin-bottom: 15px; font-size: 0.9rem; display: flex; align-items: flex-start; gap: 8px;">
+            <ion-icon name="information-circle" style="margin-top: 2px;"></ion-icon>
+            <div><strong>Announcement:</strong> {{ announcement }}</div>
+          </div>
+          
+          <div class="progress-section" *ngIf="token.status === 'waiting'" style="margin-bottom: 15px;">
+            <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 5px;">
+              <span>Progress</span>
+              <span>{{ (getProgress(token) * 100).toFixed(0) }}%</span>
+            </div>
+            <ion-progress-bar [value]="getProgress(token)" color="primary"></ion-progress-bar>
+          </div>
+          
+          <div class="live-stats" *ngIf="token.status === 'waiting'">
+            <div class="stat-box">
+              <ion-icon name="walk-outline"></ion-icon>
+              <div>
+                <p>Position in Line</p>
+                <strong>{{ getPosition(token) }}</strong>
+              </div>
+            </div>
+            <div class="stat-box">
+              <ion-icon name="timer-outline"></ion-icon>
+              <div>
+                <p>Est. Wait Time</p>
+                <strong>~{{ getEstimatedWait(token) }} mins</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="serving-alert" *ngIf="token.status === 'serving'">
+            <ion-icon name="alert-circle-outline"></ion-icon>
+            <p>It's your turn! Please proceed to {{ token.servingAt || 'the counter' }}.</p>
+          </div>
+
+          <div *ngIf="token.status === 'waiting'" style="display: flex; gap: 10px; margin-top: 15px;">
+            <ion-button fill="outline" color="warning" expand="block" (click)="delayTurn(token)" class="leave-queue-btn" style="flex: 1; margin: 0;">
+              <ion-icon name="time-outline" slot="start"></ion-icon>
+              Delay Turn
+            </ion-button>
+            <ion-button fill="clear" color="danger" expand="block" (click)="leaveQueue(token)" class="leave-queue-btn" style="flex: 1; margin: 0;">
+              <ion-icon name="close-circle-outline" slot="start"></ion-icon>
+              Leave
+            </ion-button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HISTORY TAB -->
+    <div *ngIf="activeTab === 'history'" class="tab-content fade-in">
+      <div class="empty-state" *ngIf="historyTokens.length === 0">
+        <ion-icon name="time-outline"></ion-icon>
+        <p>No past tokens found.</p>
+      </div>
+
+      <div class="token-card" *ngFor="let token of historyTokens" style="opacity: 0.8;">
+        <div class="token-header">
+          <div style="display: flex; flex-direction: column;">
+            <span style="font-size: 0.85rem; color: var(--ion-color-primary); font-weight: 500;">
+              <ion-icon name="business-outline"></ion-icon> {{ token.organizationName || 'Independent' }}
+            </span>
+            <h2 style="margin: 0; padding-top: 4px;">{{ token.queueName }}</h2>
+          </div>
+          <ion-badge [color]="token.status === 'done' ? 'success' : 'danger'" class="status-badge">
+            {{ token.status | titlecase }}
+          </ion-badge>
+        </div>
+        <div class="token-body">
+          <p>Token #{{ token.tokenNumber }}</p>
+          <p style="font-size: 0.8rem; color: #888;">{{ token.createdAt?.toDate() | date:'short' }}</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- QR Scanner FAB -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" style="margin-bottom: 20px; margin-right: 10px;">
+    <ion-fab-button (click)="openScanner()" color="primary">
+      <ion-icon name="qr-code-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <!-- QR Scanner Modal -->
+  <ion-modal [isOpen]="isScannerOpen" (didDismiss)="closeScanner()">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Scan to Join Queue</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="closeScanner()">Close</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding" style="display: flex; flex-direction: column; align-items: center; justify-content: center; background: #000;">
+        <div id="qr-reader" style="width: 100%; max-width: 500px; border-radius: 12px; overflow: hidden; margin: 20px auto;"></div>
+        <p style="text-align: center; color: #fff; margin-top: 20px;">Position the QR code inside the frame to scan.</p>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+</ion-content>
