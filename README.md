@@ -62,7 +62,7 @@ QueueLess follows a modular Angular architecture, leveraging **Ionic Framework**
 ### Installation
 1. **Clone the repository**:
    ```bash
-   git clone [repository-url]
+   git clone https://github.com/FaizaNaseem34/QueueLess.git
    cd QueueLess/queueless
    ```
 
